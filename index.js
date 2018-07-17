@@ -15,7 +15,7 @@ var express = require('express'),
     path = require('path'),
     _ = require('lodash');
 
-
+app.use(cors())
 app.use(bodyParser.urlencoded({ extended: true, limit:'99mb' }));
 app.use(bodyParser.json({limit:'99mb'}));
 app.use(expressValidator({
