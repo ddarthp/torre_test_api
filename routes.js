@@ -6,6 +6,7 @@ module.exports = function(app) {
  	// api controllers
 
     let torre = require('./api/torre');
+    let linkedin = require('./api/linkedin');
 
     let originsWhitelist = [
             '*',
@@ -20,16 +21,22 @@ module.exports = function(app) {
     };
     //here is the magic
     app.use(cors(corsOptions));
-
     app.options('/api', cors(corsOptions));
 
-    app.route('/api/oauth/linkedin')
-        .get(torre.oauthLinkedin, cors(corsOptions))
-    
-    app.route('/api/torre/bio')
-        .post(torre.linkedIn, cors(corsOptions)); 
-        // app.route('/api/torre/bio')
-        // .post(torre.linkedIn, cors(corsOptions)); 
+    app.all('/*', function(req, res, next) {
+        res.header("Access-Control-Allow-Origin", "*");
+        next();
+    });
+
+    // linkedin 
+    app.route('/api/linkedin/authorization')
+    .get(linkedin.authorization, cors(corsOptions)); 
+    app.route('/api/linkedin/access_token')
+    .get(linkedin.accessToken, cors(corsOptions));
+    app.route('/api/linkedin/person/me')
+    .post(linkedin.person, cors(corsOptions)); 
+
+    // torre bio
     app.route('/api/torre/bio')
         .post(torre.bio, cors(corsOptions)); 
 
